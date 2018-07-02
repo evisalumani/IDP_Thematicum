@@ -1,5 +1,3 @@
-// var stocks = require('./us_stocks.json');
-// db.insert(stocks.SP1500);
 db.stocks.insert([
         {
             "seqNr": "1",

@@ -4,19 +4,11 @@ The application was developed at the "Chair of Financial Management and Capital 
 on the topic of thematic investing. 
 
 ### How to run:
-1. Install dependencies: `npm install`
-2. Create a `.env` file at the project's root to hold the environment variables, based on the [dotenv](https://www.npmjs.com/package/dotenv) package. 
-
-	Working example:
-	```
-	ENV=development
-	LOCAL_HOST=localhost
-	LOCAL_MONGODB_PORT=27017
-	LOCAL_MONGODB_DBNAME=thematicum
-	JWT_SECRET=randomvalue
-	```
-3. Run the following commands in separate terminals to start the database, web server and client app: `mongod` (or by specifying a custom path for the data, e.g. `mongod --dbpath db`), `npm start`, `npm run build`.
-4. View the application on the default port, at localhost:3000
+To run this application locally (non-Dockerized):
+1. Start the MongoDB database (from project root): `mongod --dbpath db`. The folder db must be previously created in the project root; otherwise, the --dbpath parameter can be left out and the default location will be used.
+2. If this is the first time starting the database and no stock data is inserted, run this command (from /server/utilities) to insert some initial stock data: `mongo localhost:27017/thematicum stocksInsert.js`
+3. Install dependencies of the Node.js server (from /server): `npm install`. Run the server as: `npm start`. If needed, the server environment variables can be modified in the `.env` file, based on the [dotenv](https://www.npmjs.com/package/dotenv) package. The REST API from Express is running on `localhost:3000`. 
+4. Install dependencies of the Angular app (from /angular-app): `npm install`. Run the app as: `ng serve`. The client app can be viewed on the browser on `localhost:4200`.
 
 ### Screenshots:
 
