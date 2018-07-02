@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import favicon from 'serve-favicon';
+import http from 'http';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -24,12 +24,6 @@ mongoose.connect(mongodbPath)
     .then(() => console.log('Connected to MongoDb'))
     .catch(error => console.log('Error connecting to MongoDb'));
 
-// view engine setup
-app.set('views', path.join(__dirname, './server/views'));
-app.set('view engine', 'hbs');
-
-//uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -50,14 +44,39 @@ app.use('/api/stocks', stockRoutes);
 app.use('/api/stockallocations', stockAllocationRoutes);
 app.use('/api/admin', adminRoutes);
 
-app.use(function (req, res, next) {
-    return res.render('index');
+/**
+ * Get port from environment and store in Express.
+ */
+const port = process.env.PORT || '3000';
+app.set('port', port);
+
+// Authorize all OPTIONS requests 
+/** https://stackoverflow.com/questions/45297853/angular-2-response-for-preflight-has-invalid-http-status-code-401 */
+app.use(function (err, req, res, next) {
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
 });
 
-//error handling
+// Error handling
 app.use(function (err, req, res, next) {
     console.log('Error handling middleware', JSON.stringify(err))
     return res.status(err.status || 500).json(err);
 });
+
+/**
+ * Create HTTP server.
+ */
+const server = http.createServer(app);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port, () => console.log(`API running on localhost:${port}`));
+
+// TODO: handlers?
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 export default app;
