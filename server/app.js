@@ -20,7 +20,6 @@ dotenv.config();
 const app = express();
 
 const mongodbPath = settings.getDBConnectionString();
-
 mongoose.connect(mongodbPath)
     .then(() => console.log('Connected to MongoDb'))
     .catch(error => {
